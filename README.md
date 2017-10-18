@@ -1,5 +1,6 @@
 # web3-notes
-web3.js的笔记
+
+web3.js有很多能与区块链进行交互的Api；
 
 英文的API Doc ：
 
@@ -7,24 +8,22 @@ web3.js的笔记
 - https://github.com/ethereum/wiki/wiki/JavaScript-API
 
 
-### 我认为的名词理解
+### 名词理解
 
 whisper 	私密消息
-Provider	宿主
+Provider	宿主/以太坊节点
 
 ### 准备工作
 
 安装环境：
 
-	//安装Node （npm会自带）
-	brew install node
+	//1、安装Node （npm会自带）
 
-	//安装开发环境的区块链节点
+	//2、安装开发环境的区块链节点（方便与web3.js进行交互）
 	npm install -g ethereumjs-testrpc
 
-	//安装web3的模块
-	npm install web3
-
+	//3、安装web3的模块
+	npm install web3 --save
 
 通过testrpc命令，直接开启区块链节点：
 
@@ -33,9 +32,9 @@ Provider	宿主
 
 ![](https://i.imgur.com/W3oPOLb.png)
 
-此时会生成一些区块链地址，密钥，等相关基础数据；
+此时会生成一些区块链地址，密钥，等相关基础数据；上面testrpc执行后,命令行工具不能关闭，因为web3.js就是用来与那个节点进行交互的；
 
-实例化WEB3；需要配置基于的 Provider (上面testrpc执行后不能关闭)
+创建web3对象：需要先创建web3对象，然后连接到以太坊节点（成功后，就可以使用web3.js与节点进行交互了）
 
 	var Web3 = require('../lib/web3');
 	
@@ -49,10 +48,10 @@ Provider	宿主
 	    // 这个方法可以用来检查在使用mist浏览器等情况下已经设置过Provider，避免重复设置的情况。
 	}
 	
-	var coinbase = web3.eth.coinbase;//节点的挖矿奖励地址
+	var coinbase = web3.eth.coinbase;//用于接收挖矿奖励的地址
 	console.log("节点的挖矿奖励地址:",coinbase);
 
-直接 webstorm 邮件运行，打印的数据如下
+直接 webstorm 右键运行，打印的数据如下
 
 	*****当前的Provider Star*****
 	HttpProvider {
@@ -63,4 +62,27 @@ Provider	宿主
 	*****End
 	
 	节点的挖矿奖励地址: 0xb8a40492830e8fc0e4d045e866c36fd0c9368154
+
+
+回调函数支持error first callback的风格;比如coinbase是同步获取奖励地址，如果想异步获取，可以使用getCoinbase方法；
+
+两者的代码格式如下
+
+
+	//同步获取方法;
+	var coinbase=web3.eth.coinbase;
+	console.log("同步获取节点的挖矿奖励地址:",coinbase);
+	
+	
+	//异步的方法；
+	var getCoinbase;
+	web3.eth.getCoinbase(function (err, data) {
+	    if(!err){
+	        getCoinbase=data;
+	        console.log("异步获取节点的挖矿奖励地址:",getCoinbase);
+	    } else{
+	        console.error("失败",err);
+	    }
+	});
+
 
