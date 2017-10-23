@@ -1,8 +1,8 @@
 # Global-api
 
-### 途径：查看web3.js的源码，可以发现；
+##### 途径：查看web3.js的源码，可以发现；
 
-##### 全局的属性有
+** 全局的属性有 **
 
 * _requestManager
 * currentProvider	+
@@ -18,7 +18,7 @@
 * _extend		+  扩展了 formatters、utils、Method、Property
 
 
-##### 定义在  Web3.prototype 的方法
+** 定义在  Web3.prototype 的方法 **，所有实例都可以调用；
 
 * web3.setProvider(provider)    //设置Provider
 * web3.reset(keepIsSyncing)     //用来重置web3的状态,参数可以控制 web3.eth.isSyncing()
@@ -29,74 +29,79 @@
 *       String - 传入的需要使用Keccak-256 SHA3算法进行哈希运算的字符串。
 *       Object - 可选项设置。如果要解析的是hex格式的十六进制字符串。需要设置encoding为hex,因为JS中会默认忽略0x,如：{encoding: 'hex'}
 
-
+	  //设置节点，（HttpProvider使用HTTP基本身份验证）
+	  web3.setProvider(new web3.providers.HttpProvider('http://host.url', 0, BasicAuthUsername, BasicAuthPassword));	//设置验证
 
 
 ### 途径：通过console.dir(web3.xxxx);查看，比如查看 web3.providers 的属性和方法
 
-##### web3.currentProvider 的属性和方法
+** web3.providers 链接节点 **
 
+* Web3.providers.HttpProvider   //基于HTTP从Web3.providers链接节点
+* Web3.providers.IpcProvider    //基于IPC 从Web3.providers连接节点
+
+	if (typeof web3 !== 'undefined') {
+	  web3 = new Web3(web3.currentProvider);
+	} else {
+	  //链接节点
+	  web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+	}
+
+
+** web3.currentProvider 当前所链接节点的属性 **
 
 	{
 	  host: 'http://localhost:8545',
 	  timeout: 0,
 	  user: undefined,
-	  password: undefined }
+	  password: undefined 
+	}
+
+* web3.currentProvider.host			//节点地址
+* web3.currentProvider.timeout		//超时时间
+* web3.currentProvider.user			//验证用户名
+* web3.currentProvider.password		//验证密码
+
+** web3.net 当前链接节点的链接状态 **
+
+* web3.net.listening			//true表示连接上的节点正在listen网络请求，否则返回false；此属性是只读的，表示当前连接的节点，是否正在listen网络连接。listen可以理解为接收
+		* web3.net.getListener  	//异步
+* web3.net.peerCount			//节点连上的其它以太坊节点的数量(对象是当前所连接的节点)
+		* web3.net.getPeerCount  	//异步
+
+** web3.version 当前web3链接的版本信息 **
+
+* web3.version.api          //web3.js版本				-> '0.20.2'
+* web3.version.node         //客户端/节点的版本信息		-> EthereumJS TestRPC/v1.1.3/ethereum-js
+    	* getNode() 			//异步
+* web3.version.network      //网络协议版本  同步方式      -> 1508294093524
+    	* getNetwork()			//异步
+* web3.version.ethereum     //以太坊的协议版本 同步方式	-> 63
+    	* getEthereum()			//异步
+* web3.version.whisper      //whisper协议版本 同步方式	-> 2
+    	* getWhisper()			//异步
+
+** web3.settings 的属性和方法 **
+
+* web3.settings.defaultBlock	//该方法用来设置eth的默认区块；		web3.eth.defaultBlock
+* web3.settings.defaultAccount	//该方法用来设置eth默认帐户		web3.eth.defaultAccount //web3.eth.defaultAccount = web3.eth.coinbase;
 
 
-* web3.currentProvider.host
-* web3.currentProvider.timeout
-* web3.currentProvider.user
-* web3.currentProvider.password
-
-
-##### web3.net 的属性和方法
-
-* web3.net.listening	//true表示连接上的节点正在listen网络请求，否则返回false；此属性是只读的，表示当前连接的节点，
-						* 是否正在listen网络连接。listen可以理解为接收;getListener为异步
-* web3.net.peerCount	//连接节点连上的其它以太坊节点的数量 (.getPeerCount是异步)
-
-##### web3.settings 的属性和方法
-
-* web3.settings.defaultBlock	//默认阻止
-* web3.settings.defaultAccount	//默认帐户
-
-
-##### web3.providers 的属性和方法
-
-* Web3.providers.HttpProvider   //从Web3.providers设置所需的提供程序
-* Web3.providers.IpcProvider    //从Web3.providers设置所需的提供程序
-
-
-
-##### web3.version 的属性和方法
-
-* web3.version.api          //以太坊js的api版本              -> '0.20.2'
-* web3.version.node         //客户端或节点的版本信息 同步方式  -> EthereumJS TestRPC/v1.1.3/ethereum-js
-    * getNode() //异步
-* web3.version.network      //网络协议版本  同步方式      -> 1508136413945
-    * getNetwork() //异步
-* web3.version.ethereum     //以太坊的协议版本 同步方式    -> 63
-    * getEthereum() //异步
-* web3.version.whisper      //whisper协议的版本 同步方式  ->2
-    * getWhisper()   //异步
-
-
-### web3.db 	的属性和方法
+** web3.db 的属性和方法 **
 
 * web3.db.putString(db, key, value)		//在本地数据库的级别存储一个字符串 参数(存储使用的数据库,存储的键,存储的值)
 * web3.db.getString(db, key)			//从本地的leveldb数据库中获取一个属性值 参数(存储使用的数据库,存储的键)
 
-* web3.db.putHex(db, key, value)	//储存本地的leveldb中的二进制数据  参数(存储使用的数据库,存储的键,十六进制格式的二进制)
-* web3.db.getHex(db, key)			//获取本地的leveldb中的二进制数据  参数(存储使用的数据库,存储的键)
+* web3.db.putHex(db, key, value)	//储存本地数据库中的十六进制数据  参数(存储使用的数据库,存储的键,十六进制格式的二进制)
+* web3.db.getHex(db, key)			//获取本地数据库中的十六进制数据  参数(存储使用的数据库,存储的键)
 
 
+** web3.shh 	的属性和方法 **
 
-### web3.shh 	的属性和方法
-
-* web3.shh.version()						//版本号	->"2"
+* web3.shh.post(object [, callback])		//发送私密消息时候调用此方法，返回一个布尔值，true发送成功。false是失败；
+* web3.shh.version()						//版本号	->"2",	对应web3.version.whisper？？
 * web3.shh.info								//信息
-* web3.shh.setMaxMessageSize				//最大消息大小
+* web3.shh.setMaxMessageSize				//设置最大消息字段
 * web3.shh.setMinPoW						//设置最小Pow
 * web3.shh.markTrustedPeer					//标记可信标记
 * web3.shh.newKeyPair						//新密钥对
@@ -111,13 +116,12 @@
 * web3.shh.hasSymKey						//是否含有某个系统键
 * web3.shh.getSymKey						//获取某个系统键
 * web3.shh.deleteSymKey						//删除某个系统键
-* web3.shh.post(object [, callback])		//发送私密消息时候调用此方法，返回一个布尔值，true发送成功。false是失败；
 
 
- ##### 下面方式是API里提到了，但是我自己跑的时候是undefined；
+下面方式是shh API里提到了，但是我自己跑的时候是undefined（'0.20.2'版本的web3）；  https://github.com/ethereum/wiki/wiki/JavaScript-API
 
-* web3.shh.newIdentity([callback])				//创建一个新的身份，返回值是当前身份的HEX字符串；
-* web3.shh.hasIdentity(identity, [callback])	//检查用户身份信息是否存在，返回布尔，true表示存在；
+* web3.shh.newIdentity([callback])				//创建一个十六进制字符串的新身份
+* web3.shh.hasIdentity(identity, [callback])	//检查用户是否给出了身份，返回布尔，true表示存在；
 * web3.shh.newGroup
 * web3.shh.addToGroup
 * web3.shh.filter					//观察收到的私密消息
@@ -206,3 +210,35 @@
 * web3._extend.utils.isJson
 * web3._extend.utils.isBloom
 * web3._extend.utils.isTopic
+
+
+*********************** USE ************************
+
+### shh
+
+** web3.shh.post **
+
+var message = {
+  from: identity,
+  topics: [topic],
+  payload: payload,
+  ttl: 100,
+  workToProve: 100 // or priority TODO
+};
+
+web3.shh.post(message);
+
+### persional
+
+** web3.personal.newAccount **
+
+var newAcc=web3.personal.newAccount("zhuzhu");// 或者 var newAcc=web3.personal.newAccount();
+console.log(newAcc);//0x42e61e58034d4c301adf7b86d6001a2f33d2096c
+console.log(web3.eth.accounts);//尾部push了一个账号；
+
+** web3.personal.listAccounts **
+
+与web3.eth.accounts 区别
+
+console.log("所有账号:", web3.eth.accounts);//所有账户，包含personal账户
+console.log("私有账户:", web3.personal.listAccounts);//personal账户；

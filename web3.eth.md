@@ -212,3 +212,19 @@ receipt 的数据如下；
 
 
 
+** eth.filter **
+
+    function watchBalance() {
+        var coinbase = web3.eth.coinbase;//当前奖励的地址
+
+        var originalBalance = web3.eth.getBalance(coinbase).toNumber();//数字格式的余额
+        document.getElementById('coinbase').innerText = 'coinbase: ' + coinbase;
+        document.getElementById('original').innerText = ' original balance: ' + originalBalance + '    watching...';
+
+		//观察的区块 （latest）
+        web3.eth.filter('latest').watch(function() {
+            var currentBalance = web3.eth.getBalance(coinbase).toNumber();
+            document.getElementById("current").innerText = 'current: ' + currentBalance;
+            document.getElementById("diff").innerText = 'diff:    ' + (currentBalance - originalBalance);
+        });
+    }

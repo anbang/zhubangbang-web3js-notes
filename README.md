@@ -51,6 +51,12 @@ Provider	宿主/以太坊节点
 	var coinbase = web3.eth.coinbase;//用于接收挖矿奖励的地址
 	console.log("节点的挖矿奖励地址:",coinbase);
 
+网页中，直接引用web3.js 创建还可以下面这种 
+
+    var Web3 = require('web3');
+    var web3 = new Web3();
+    web3.setProvider(new web3.providers.HttpProvider("http://localhost:8545"));
+
 直接 webstorm 右键运行，打印的数据如下
 
 	*****当前的Provider Star*****
@@ -86,3 +92,9 @@ Provider	宿主/以太坊节点
 	});
 
 
+
+##### 创建合约交易；
+
+如果提示：Method eth_compileSolidity not supported.
+
+参考：https://ethereum.gitbooks.io/frontier-guide/content/compiling_contract.html

@@ -10,7 +10,6 @@ if (typeof web3 !== 'undefined') {
 var coinbase=web3.eth.coinbase;
 console.log("同步获取节点的挖矿奖励地址:",coinbase);
 
-
 //异步的方法；
 var getCoinbase;
 web3.eth.getCoinbase(function (err, data) {

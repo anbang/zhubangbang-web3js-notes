@@ -13,7 +13,34 @@ console.log("同步获取节点的挖矿奖励地址:", coinbase);
 console.log("账号:", web3.eth.accounts);
 
 // 合约ABI
-var abi = [{"constant":false,"inputs":[{"name":"receiver","type":"address"},{"name":"amount","type":"uint256"}],"name":"sendCoin","outputs":[{"name":"sufficient","type":"bool"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"addr","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"inputs":[],"payable":false,"type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_from","type":"address"},{"indexed":true,"name":"_to","type":"address"},{"indexed":false,"name":"_value","type":"uint256"}],"name":"Transfer","type":"event"}];
+var abi = [
+    {
+        "constant":false,
+        "inputs": [{"name":"receiver","type":"address"},{"name":"amount","type":"uint256"}],
+        "name":"sendCoin",
+        "outputs":[{"name":"sufficient","type":"bool"}],
+        "payable":false,
+        "type":"function"
+    },
+    {
+        "constant":false,
+        "inputs":[{"name":"addr","type":"address"}],
+        "name":"getBalance",
+        "outputs":[{"name":"","type":"uint256"}],
+        "payable":false,
+        "type":"function"
+    },
+    {
+        "inputs":[],
+        "payable":false,
+        "type":"constructor"
+    },
+    {
+        "anonymous":false,
+        "inputs":[{"indexed":true,"name":"_from","type":"address"},{"indexed":true,"name":"_to","type":"address"},{"indexed":false,"name":"_value","type":"uint256"}],
+        "name":"Transfer",
+        "type":"event"
+    } ];
 // 合约地址
 var address = web3.eth.accounts[0];
 console.log("合约地址",address);
